@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambil Lokasi</title>
+</head>
+<body>
+
+    <h2>Ambil Lokasi Pegawai</h2>
+    <button onclick="getLocation()">Ambil Lokasi</button>
+    
+    <p id="status"></p>
+
+    <form action="save_location.php" method="post">
+        <label>Latitude:</label>
+        <input type="text" id="latitude_pegawai" name="latitude" readonly><br><br>
+        
+        <label>Longitude:</label>
+        <input type="text" id="longitude_pegawai" name="longitude" readonly><br><br>
+
+        <button type="submit">Simpan Lokasi</button>
+    </form>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById("status").innerText = "Browser Anda tidak mendukung Geolocation.";
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById("latitude_pegawai").value = position.coords.latitude;
+            document.getElementById("longitude_pegawai").value = position.coords.longitude;
+            document.getElementById("status").innerText = "Lokasi berhasil diambil!";
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("status").innerText = "Anda menolak permintaan lokasi.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("status").innerText = "Informasi lokasi tidak tersedia.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("status").innerText = "Permintaan lokasi melebihi batas waktu.";
+                    break;
+                default:
+                    document.getElementById("status").innerText = "Terjadi kesalahan saat mengambil lokasi.";
+            }
+        }
+    </script>
+
+</body>
+</html>
